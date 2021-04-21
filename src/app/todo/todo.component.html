@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <div class="mat-elevation-z8">
+        <table
+          mat-table
+          matTableExporter
+          [dataSource]="dataSource"
+          #exporter="matTableExporter"
+          [hiddenColumns]="[0]"
+          matSort
+        >
+          <ng-container matColumnDef="userId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>UserId</th>
+            <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+            <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="completed">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Completed</th>
+            <td mat-cell *matCellDef="let element">{{ element.completed }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element" class="action-link">
+              <button
+                (click)="openDialog(element)"
+                mat-mini-fab
+                color="primary"
+                aria-label="Example icon button with a menu icon"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+      <br />
+      <div>
+        <kendo-chart>
+          <kendo-chart-title
+            text=" red(completed)   yellow(not completed)"
+          ></kendo-chart-title>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item [categories]="['']">
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item
+              type="bar"
+              [gap]="2"
+              [spacing]="0.25"
+              [data]="graphValueTrue"
+            >
+            </kendo-chart-series-item>
+            <kendo-chart-series-item type="bar" [data]="graphValueFalse">
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </div>
+    </div>
+    <div class="col-4">
+      <div *ngIf="formVisibility">
+        <p>
+          <label id="id">Id: {{ editData.id }}</label>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>userId</mat-label>
+            <input
+              matInput
+              placeholder="Number"
+              required
+              id="userId"
+              [(ngModel)]="userId"
+            />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              placeholder="Title"
+              required
+              id="title"
+              [(ngModel)]="title"
+            />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill" class="center">
+            <mat-label>select one</mat-label>
+            <mat-select [(ngModel)]="selectedgroup">
+              <mat-option *ngFor="let group of completed" value="{{ group }}">{{
+                group
+              }}</mat-option>
+            </mat-select>
+            <mat-hint>Here's the dropdown arrow ^</mat-hint>
+          </mat-form-field>
+        </p>
+        <button
+          mat-raised-button
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="updateData()"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
